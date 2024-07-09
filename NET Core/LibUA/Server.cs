@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using LibUA.Core;
+using Microsoft.Extensions.Logging;
 
 namespace LibUA
 {
@@ -348,7 +344,7 @@ namespace LibUA
                     Endpoint = socket.RemoteEndPoint
                 };
 
-                logger?.Log(LogLevel.Info, string.Format("Accepted connection from {0}", sessionInfo.Endpoint));
+                logger?.Log(LogLevel.Information, string.Format("Accepted connection from {0}", sessionInfo.Endpoint));
 
                 config = new SLChannel
                 {
@@ -539,7 +535,7 @@ namespace LibUA
                 //	app.MonitorDispatcherRemove(cfg);
                 //}
 
-                logger?.Log(LogLevel.Info, string.Format("Ended connection from {0}", sessionInfo.Endpoint));
+                logger?.Log(LogLevel.Information, string.Format("Ended connection from {0}", sessionInfo.Endpoint));
             }
 
             virtual protected bool NeedsPulse()

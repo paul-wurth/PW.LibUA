@@ -10,12 +10,13 @@
   <PropertyGroup>
     <!-- Package properties -->
     <PackageId>PW.LibUA</PackageId>
-    <Version>1.0.21-rc2</Version>
-    <Description>Open-source OPC UA client and server library.</Description>
+    <Version>1.0.23</Version>
+    <Description>Open-source OPC UA client and server library for .NET Core.</Description>
     <Authors>nauful,MET</Authors>
-    <RepositoryUrl>https://github.com/paul-wurth/PW.LibUA</RepositoryUrl>
-    <PackageProjectUrl>$(RepositoryUrl)/blob/pw-libua/README.md</PackageProjectUrl>
     <Copyright>(c) Nauful Shaikh, QuantenSystems LLC 2015-(now)</Copyright>
+    <RepositoryUrl>https://github.com/paul-wurth/PW.LibUA</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
   </PropertyGroup>
 
@@ -39,6 +40,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
     <PackageReference Include="System.Security.Cryptography.Cng" Version="5.0.0" />
   </ItemGroup>
 

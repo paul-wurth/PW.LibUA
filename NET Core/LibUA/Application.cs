@@ -3,12 +3,9 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Reflection.Metadata;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using LibUA.Core;
 
 namespace LibUA
@@ -155,20 +152,25 @@ namespace LibUA
                     monitorMapRW.EnterReadLock();
                     if (monitorMap.TryGetValue(key, out List<MonitoredItem> mis))
                     {
-                        for (int i = 0; i < mis.Count; i++)
+                        foreach (MonitoredItem mi in mis)
                         {
-                            if (mis[i].QueueData.Count >= mis[i].QueueSize)
+                            if (!(filterHandler?.Invoke(mi.Parameters?.Filter) ?? true))
                             {
-                                mis[i].QueueOverflowed = true;
-                            }
-                            else if (filterHandler?.Invoke(mis[i].Parameters?.Filter) ?? true)
-                            {
-                                mis[i].QueueData.Enqueue(dv);
+                                continue;
                             }
 
-                            if (mis[i].ParentSubscription.ChangeNotification == Subscription.ChangeNotificationType.None)
+                            if (mi.QueueData.Count >= mi.QueueSize)
                             {
-                                mis[i].ParentSubscription.ChangeNotification = Subscription.ChangeNotificationType.AtPublish;
+                                mi.QueueOverflowed = true;
+                            }
+                            else
+                            {
+                                mi.QueueData.Enqueue(dv);
+                            }
+
+                            if (mi.ParentSubscription.ChangeNotification == Subscription.ChangeNotificationType.None)
+                            {
+                                mi.ParentSubscription.ChangeNotification = Subscription.ChangeNotificationType.AtPublish;
                             }
                         }
                     }
@@ -189,20 +191,25 @@ namespace LibUA
                     monitorMapRW.EnterReadLock();
                     if (monitorMap.TryGetValue(key, out List<MonitoredItem> mis))
                     {
-                        for (int i = 0; i < mis.Count; i++)
+                        foreach (MonitoredItem mi in mis)
                         {
-                            if (mis[i].QueueEvent.Count >= mis[i].QueueSize)
+                            if (!(filterHandler?.Invoke(mi.Parameters?.Filter) ?? true))
                             {
-                                mis[i].QueueOverflowed = true;
-                            }
-                            else if (filterHandler?.Invoke(mis[i].Parameters?.Filter) ?? true)
-                            {
-                                mis[i].QueueEvent.Enqueue(ev);
+                                continue;
                             }
 
-                            if (mis[i].ParentSubscription.ChangeNotification == Subscription.ChangeNotificationType.None)
+                            if (mi.QueueEvent.Count >= mi.QueueSize)
                             {
-                                mis[i].ParentSubscription.ChangeNotification = Subscription.ChangeNotificationType.AtPublish;
+                                mi.QueueOverflowed = true;
+                            }
+                            else
+                            {
+                                mi.QueueEvent.Enqueue(ev);
+                            }
+
+                            if (mi.ParentSubscription.ChangeNotification == Subscription.ChangeNotificationType.None)
+                            {
+                                mi.ParentSubscription.ChangeNotification = Subscription.ChangeNotificationType.AtPublish;
                             }
                         }
                     }
